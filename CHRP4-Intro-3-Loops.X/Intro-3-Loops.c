@@ -1,6 +1,6 @@
 /*==============================================================================
- Project: Intro-3-Loops                 Activity: mirobo.tech/chrp4-intro-3
- Date:    May 16, 2023
+ Project: Intro-3-Loops                 Activity: mirobo.tech/intro-3
+ Date:    August 11, 2023
  
  This introductory programming activity for the mirobo.tech CHRP4 demonstrates
  the use of both while-loop and for-loop structures to change the brightness
