@@ -1,15 +1,15 @@
 /*==============================================================================
  Project: Intro-3-Loops                 Activity: mirobo.tech/intro-3
- Date:    August 11, 2023
+ Date:    December 11, 2023
  
- This introductory programming activity for the mirobo.tech CHRP4 demonstrates
- the use of both while-loop and for-loop structures to change the brightness
- of an LED using PWM (Pulse-Width Modulation).
+ This introductory programming activity for the mirobo.tech CHRP4 and UBMP4
+ demonstrates the use of both while-loop and for-loop structures to change
+ the brightness of an LED using PWM (Pulse-Width Modulation).
  
  Additional program analysis and programming activities reinforce the concepts
  of limits using conditional statements, challenge the learner's understanding
- of program structure and flow, and expand the use of loops to create different
- pitches of tones and audio frequency sweeps.
+ of variables, program structure and flow, and explore nested loops to create
+ different pitches of tones and audio frequency sweeps.
 ==============================================================================*/
 
 #include    "xc.h"              // Microchip XC8 compiler include file
@@ -45,7 +45,7 @@ int main(void)
             pwmLED4 += 1;
         }
         
-        // PWM LED3 brightness
+        // PWM LED4 brightness
         pwmPeriod = 255;
         while(pwmPeriod != 0)
         {
@@ -58,7 +58,7 @@ int main(void)
         }
         LED4 = 0;
         
-        // Activate bootloader if SW1 is pressed.
+        // Reset the microcontroller and start the bootloader if SW1 is pressed.
         if(SW1 == 0)
         {
             RESET();
@@ -76,7 +76,7 @@ int main(void)
  *      run with '1' as its condition. Why?
  * 
  * 2.   There is a second, 'inner' while loop inside the main loop, beginning
- *      with the statement: while(pwmPeriod != 0)
+ *      with the conditional while statement: while(pwmPeriod != 0)
  * 
  *      What condition is being evaluated inside this while statement's
  *      brackets? How many times will the contents of this inner loop run?
@@ -87,8 +87,8 @@ int main(void)
  * 4.   Pressing the up or down buttons (SW4 and SW3) will increase or decrease
  *      the brightness of LED D4 using PWM (Pulse-Width Modulation). How many 
  *      different brightnesses can the LED have? Try to figure out the
- *      percentage brightness change corresponding to a one-step change in the
- *      pwmLED4 variable.
+ *      percentage brightness change that corresponds to a one-number change in
+ *      the value of the pwmLED4 variable.
  * 
  * 5.   A while loop needs three statements to perform its function:
  * 
@@ -111,10 +111,10 @@ int main(void)
  *
  *      A 'for' loop is an alternative to the while loop and incorporates the
  *      assignment of a loop variable, the loop conditional check, and variable
- *      modification into a single statement as shown in the example code, 
- *      below. Compare the structure of the 'while' loop in the program with the
- *      'for' loop, below. What is an advantage of using a 'for' loop instead
- *      of a 'while' loop? 
+ *      modification into a single statement as shown in the example code below.
+ *      Compare the structure of the 'while' loop in the program with the 'for'
+ *      loop, below. What is an advantage of using a 'for' loop instead of a
+ *      'while' loop? 
  *    
  *      Replace the entire while structure in the program with this 'for' loop:
 
@@ -150,7 +150,7 @@ int main(void)
  
         pwmPeriod = 128;
 
- *      Next, add the following lines after the for loop:
+ *      Next, add the following lines to your program below the for loop:
         
         if(pwmPeriod == 128)
         {
@@ -161,16 +161,35 @@ int main(void)
             LED3 = 0;
         }
         
- *      Compile and run the code. When the program runs, the pwmPeriod variable
- *      inside the for loop will count down from 255 to 0, and should be 0 when
- *      the loop finishes. The 'if' structure will let us know. Is LED D3 lit?
- *      If it is, what must the value of the global pwmPeriod variable be?
+ *      When the program runs, the pwmPeriod variable inside the for loop will
+ *      count down from 255 to 0, and should be 0 when the loop finishes. The 
+ *      'if' structure will let us know. Compile and run the program. Is LED D3
+ *      lit? If it is, what must the value of the global pwmPeriod variable be?
  * 
- *      Can the global pwmPeriod variable definition at the top of now be 
+ * 7.   Can the global pwmPeriod variable definition at the top of now be 
  *      removed since the pwmPeriod variable is being defined in the for loop?
- *      Try it!
+ *      Try it and see. Comment out the pwmPeriod variable declaration at the
+ *      top of the program. If the program compiles and runs without error, the
+ *      global pwmPeriod variable is no longer necessary. Unfortunately, this
+ *      means that some variables will be defined at the top of the code, while
+ *      other variables will be defined in the code ? potentially making it more
+ *      difficult to track variables and understand a program.
  * 
- * 7.   Add this code below the PWM loop to generate a tone:
+ *      Instead of defining a new pwmPeriod variable local to the loop, the
+ *      global pwmPeriod variable can be used in the loop. Un-comment the
+ *      pwmPeriod variable definition at the top of the program, and then
+ *      replace the 'for' declaration statement with the one below:
+ 
+        for(pwmPeriod = 255; pwmPeriod != 0; pwmPeriod --)
+
+ *      By removing the 'unsigned char' descriptors before the pwmPeriod = 255;
+ *      variable assignment, the pwmPeriod variable used by the loop will be the
+ *      global variable defined at the top of the program. Try it out. Does LED
+ *      D3 still show pwmPeriod as having the value 128? What would happen if
+ *      you tried to comment out the pwmPeriod variable declaration now?
+ * 
+ * 8.   Add the code below the PWM loop to generate a tone. (Comment out the 
+ *      PWM loop for a better sound.)
                 
         // Change pitch
         if(SW2 == 0)
@@ -191,19 +210,19 @@ int main(void)
         }
 
  *      This code makes tones by using two nested for loops. The outer loop
- *      causes the BEEPER pin to toggle once before the inner loop runs. The
- *      inner loop is an empty loop, shown by its trailing semicolon ';'. It
- *      contains no curly braces, and no code to run, but it does add a short
- *      delay to the program simply by counting down a loop variable. The more
- *      loops it takes to count down, the more instruction cycles it will take
- *      the microcontroller to decrement the loop counter variable to zero,
- *      increasing the time delay until the BEEPER pin toggles again during the
- *      next loop cycle.
+ *      (using the cycles variable) causes the BEEPER pin to toggle once before
+ *      the inner loop runs. The inner loop (using the period variable) is an
+ *      empty loop, shown by its trailing semicolon ';'. Empty loops contain
+ *      no curly braces or code to run, but add a short delay to the program
+ *      simply by having to count down a loop variable. The more loops it takes
+ *      to count the variable down, the more instruction cycles it will take the
+ *      microcontroller to decrement the loop counter variable to zero,
+ *      increasing the time delay until outer loop ends.
  * 
  *      What numeric type is the period variable? How large a number can this
  *      period variable hold?
  * 
- * 8.   Why is the value of the period variable copied to the local variable p
+ * 9.   Why is the value of the period variable copied to the local variable p
  *      by the inner for loop's initiation statement? What would happen if the
  *      actual period variable was decremented instead? (Hint: practice thinking
  *      like a computer and try to follow the instructions step-by-step.)
@@ -212,16 +231,17 @@ int main(void)
  * 
  * 1.   Pressing and holding SW3 or SW4 causes the brightness of LED D4 to
  *      repeatedly cycle through its entire brightness range because the pwmLED4
- *      variable is allowed to either overflow, going above 255, or underflow,
- *      by going below 0.
+ *      variable is allowed to either overflow (increase above 255), or
+ *      underflow (decrease below 0).
  * 
- *      Modify your program code so that pressing and holding SW3 will dim the
- *      LED until it is off, and keep if off, and pressing and holding SW4 will
- *      brighten the LED until it reaches its maximum brightness, and maintain
- *      that brightness while the button is held.
+ *      Add conditional code to modify your program code to prevent overflow
+ *      or underflow. That is, pressing and holding SW3 should dim the LED until
+ *      t is off and keep if off, and pressing and holding SW4 should brighten
+ *      the LED until it reaches its maximum brightness, and maintain that
+ *      brightness without cycling through the range again.
  * 
  * 2.   Modify your program to control the brightness of two different LEDs
- *      simultaneously. Add code to control LED D2 using SW2 and SW5 while
+ *      simultaneously. Add statements to control LED D2 using SW2 and SW5 while
  *      continuing to use SW3 and SW4 to control LED D4.
  * 
  *      Hint: To ensure each LED can reach its maximum brightness -- or 100% PWM
@@ -229,13 +249,13 @@ int main(void)
  *      the same loop. You can view the resulting PWM wave if you have access to
  *      an oscilloscope. If not, you can ensure your LEDs reach full brightness
  *      by lighting LED3 and LED5 at the start of your program and comparing
- *      their brightness to LED D2 and LED D4.
+ *      their brightness to LED D2 and LED D4. If your PWM functions are working
+ *      properly, their brightnesses will match.
  * 
  * 3.   Rather than having lights suddenly turn on at full brightness (or motors
- *      turn on at full power), create a program that uses a for loop and your 
- *      PWM code to make a 'soft-start' program to slowly increases the PWM 
- *      value when a button is pressed. Can you also make it turn off in a
- *      similar way?
+ *      turn on at full power), create a program that uses a for loop and the 
+ *      PWM code to make a 'soft-start' to slowly increases the PWM value when
+ *      a button is pressed. Can you also make it turn off in a similar way?
  * 
  * 4.   Make a program that creates a repeated, visual 'pulse', by continuously
  *      brightening and dimming one or more LEDs.
